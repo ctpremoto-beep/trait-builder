@@ -1,0 +1,141 @@
+{
+ "size": 1024,
+ "bases": [
+  {
+   "id": "agent/type1",
+   "label": "Agent 1",
+   "group": "Agent",
+   "src": "img/bases/agent/type1.webp"
+  },
+  {
+   "id": "agent/type2",
+   "label": "Agent 2",
+   "group": "Agent",
+   "src": "img/bases/agent/type2.webp"
+  },
+  {
+   "id": "agent/type3",
+   "label": "Agent 3",
+   "group": "Agent",
+   "src": "img/bases/agent/type3.webp"
+  },
+  {
+   "id": "cyborg/type1",
+   "label": "Cyborg 1",
+   "group": "Cyborg",
+   "src": "img/bases/cyborg/type1.webp"
+  },
+  {
+   "id": "cyborg/type2",
+   "label": "Cyborg 2",
+   "group": "Cyborg",
+   "src": "img/bases/cyborg/type2.webp"
+  },
+  {
+   "id": "cyborg/type3",
+   "label": "Cyborg 3",
+   "group": "Cyborg",
+   "src": "img/bases/cyborg/type3.webp"
+  },
+  {
+   "id": "cyborg/type_extra",
+   "label": "Cyborg extra",
+   "group": "Cyborg",
+   "src": "img/bases/cyborg/type_extra.webp"
+  },
+  {
+   "id": "developer/type1",
+   "label": "Developer 1",
+   "group": "Developer",
+   "src": "img/bases/developer/type1.webp"
+  },
+  {
+   "id": "developer/type2",
+   "label": "Developer 2",
+   "group": "Developer",
+   "src": "img/bases/developer/type2.webp"
+  },
+  {
+   "id": "developer/type3",
+   "label": "Developer 3",
+   "group": "Developer",
+   "src": "img/bases/developer/type3.webp"
+  },
+  {
+   "id": "human/type1",
+   "label": "Human 1",
+   "group": "Human",
+   "src": "img/bases/human/type1.webp"
+  },
+  {
+   "id": "human/type2_option1",
+   "label": "Human 2 \u00b7 Option 1",
+   "group": "Human",
+   "src": "img/bases/human/type2_option1.webp"
+  },
+  {
+   "id": "human/type2_option2",
+   "label": "Human 2 \u00b7 Option 2",
+   "group": "Human",
+   "src": "img/bases/human/type2_option2.webp"
+  },
+  {
+   "id": "human/type2_option3",
+   "label": "Human 2 \u00b7 Option 3",
+   "group": "Human",
+   "src": "img/bases/human/type2_option3.webp"
+  },
+  {
+   "id": "human/type3",
+   "label": "Human 3",
+   "group": "Human",
+   "src": "img/bases/human/type3.webp"
+  }
+ ],
+ "order": [
+  "face",
+  "jewelry",
+  "eyewear",
+  "hats"
+ ],
+ "traits": {
+  "face": [
+   {
+    "id": "face_tattoo",
+    "label": "Face Tattoo",
+    "src": "img/traits/face/face_tattoo.webp"
+   }
+  ],
+  "jewelry": [
+   {
+    "id": "gold_earring_chain",
+    "label": "Gold Earring Chain",
+    "src": "img/traits/jewelry/gold_earring_chain.webp"
+   }
+  ],
+  "eyewear": [
+   {
+    "id": "sunglasses",
+    "label": "Sunglasses",
+    "src": "img/traits/eyewear/sunglasses.webp"
+   }
+  ],
+  "hats": [
+   {
+    "id": "backwards_cap",
+    "label": "Backwards Cap",
+    "src": "img/traits/hats/backwards_cap.webp"
+   },
+   {
+    "id": "beanie",
+    "label": "Beanie",
+    "src": "img/traits/hats/beanie.webp"
+   },
+   {
+    "id": "bucket_hat",
+    "label": "Bucket Hat",
+    "src": "img/traits/hats/bucket_hat.webp"
+   }
+  ]
+ }
+}

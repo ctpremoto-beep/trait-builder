@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trait Builder</title>
+<style>
+:root{--bg:#0d0f12;--panel:#161a20;--line:#252b34;--txt:#e7ebf0;--mut:#8a94a3;--acc:#7ee081}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+header h1{font-size:18px;margin:0;letter-spacing:.5px}header span{color:var(--mut);font-size:13px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;padding:20px;max-width:1400px;margin:auto}
+@media(max-width:860px){main{grid-template-columns:1fr;padding:12px}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;position:sticky;top:12px;align-self:start}
+@media(max-width:860px){.stage{position:static}}
+canvas{width:100%;aspect-ratio:1;display:block;border-radius:10px;background:#20262e}
+.btns{display:flex;gap:10px;margin-top:12px}
+button.b{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);background:#1f252d;color:var(--txt);font-weight:600;cursor:pointer;font-size:15px}
+button.b.pri{background:var(--acc);color:#0b1a0c;border-color:var(--acc)}button.b:active{transform:scale(.98)}
+.side{display:flex;flex-direction:column;gap:14px}
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px}
+.sec h2{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mut);margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.opt{border:2px solid transparent;border-radius:10px;background:#1c2128;cursor:pointer;padding:4px;text-align:center;color:var(--txt)}
+.opt img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block;background:#2a313b}
+.opt div{font-size:11px;margin-top:4px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opt.on{border-color:var(--acc)}.opt.on div{color:var(--txt)}
+.none{aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:22px;border-radius:7px;background:#2a313b}
+.cap{color:var(--mut);font-size:13px;margin-top:8px;text-align:center}
+</style></head><body>
+<header><h1>TRAIT BUILDER</h1><span id="count"></span></header>
+<main><section class="stage"><canvas id="c" width="1024" height="1024"></canvas>
+<div class="cap" id="cap"></div>
+<div class="btns"><button class="b" id="rand">🎲 Randomize</button><button class="b pri" id="dl">⬇ Download PNG</button></div></section>
+<section class="side" id="side"></section></main>
+<script>
+const LBL={hats:'Hats',eyewear:'Eyewear',jewelry:'Jewelry',face:'Face'};
+let M,sel={},cache={};
+const img=s=>cache[s]||(cache[s]=new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=s}));
+function opt(label,src,on,fn,crop){const d=document.createElement('button');d.className='opt'+(on?' on':'');
+ d.innerHTML=(src?`<img loading="lazy" src="${src}" alt="">`:'<span class="none">∅</span>')+`<div>${label}</div>`;d.onclick=fn;return d}
+function ui(){const s=document.getElementById('side');s.innerHTML='';
+ const mk=(t,items)=>{const x=document.createElement('div');x.className='sec';x.innerHTML=`<h2>${t}</h2>`;const g=document.createElement('div');g.className='grid';items.forEach(i=>g.appendChild(i));x.appendChild(g);s.appendChild(x)};
+ mk('Body',M.bases.map(b=>opt(b.label,b.src,sel.base===b.id,()=>{sel.base=b.id;go()})));
+ [...M.order].reverse().forEach(c=>mk(LBL[c]||c,[opt('None',null,!sel[c],()=>{sel[c]=null;go()}),...M.traits[c].map(t=>opt(t.label,t.src,sel[c]===t.id,()=>{sel[c]=t.id;go()}))]));
+ const b=M.bases.find(b=>b.id===sel.base);document.getElementById('cap').textContent=[b.label,...M.order.map(c=>sel[c]&&M.traits[c].find(t=>t.id===sel[c]).label)].filter(Boolean).join(' · ');
+ history.replaceState(null,'','#'+new URLSearchParams(Object.entries(sel).filter(e=>e[1]))) }
+async function draw(){const x=document.getElementById('c').getContext('2d');
+ const L=[M.bases.find(b=>b.id===sel.base).src,...M.order.filter(c=>sel[c]).map(c=>M.traits[c].find(t=>t.id===sel[c]).src)];
+ const ims=await Promise.all(L.map(img));x.clearRect(0,0,1024,1024);ims.forEach(i=>x.drawImage(i,0,0,1024,1024))}
+function go(){ui();draw()}
+document.getElementById('rand').onclick=()=>{const p=a=>a[Math.floor(Math.random()*a.length)];sel.base=p(M.bases).id;
+ M.order.forEach(c=>sel[c]=Math.random()<.35?null:p(M.traits[c]).id);go()};
+document.getElementById('dl').onclick=()=>{const a=document.createElement('a');a.download='combo-'+[sel.base,...M.order.map(c=>sel[c])].filter(Boolean).join('-').replace(/\//g,'_')+'.png';
+ document.getElementById('c').toBlob(b=>{a.href=URL.createObjectURL(b);a.click()},'image/png')};
+fetch('manifest.json',{cache:'no-cache'}).then(r=>r.json()).then(m=>{M=m;const h=new URLSearchParams(location.hash.slice(1));
+ sel.base=M.bases.some(b=>b.id===h.get('base'))?h.get('base'):M.bases[0].id;M.order.forEach(c=>sel[c]=h.get(c)||null);
+ document.getElementById('count').textContent=`${M.bases.length} bodies · ${M.order.reduce((n,c)=>n+M.traits[c].length,0)} traits`;go()});
+</script></body></html>
